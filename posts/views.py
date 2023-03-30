@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
+
 # Create your views here.
 def index(request):
     posts = Post.objects.filter(isPublish=True).order_by('-created_at')
