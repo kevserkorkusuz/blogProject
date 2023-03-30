@@ -1,0 +1,178 @@
+{% extends "index.html" %}
+{% load static %
+{%load humanize%}  
+
+
+{% block title %}
+    <title>Kullanıcı: {{profil.name}} {{profil.surname}} </title>
+{% endblock title %}}
+
+
+{% block content %}
+
+<style>
+    .tabcontent {
+        display: none;
+    }
+    .show {
+        display: block;
+    }
+    .tab {
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+    }
+    .tablinks {
+        background-color: transparent;
+        border: none;
+        width: 48%;
+        padding: 20px;
+        font-size: 20px;
+        color: white;
+    }
+
+    .tablinks.active {
+        border-bottom: 1px solid white;
+    }
+</style>
+    <div class="profil-info">
+        <div class="d-flex justify-content-between">
+            <div class="profil-image d-flex">
+                <img src="{{profil.image.url}}" alt="{profil.name}" class="rounded-5 mt-1" width="50" height="50">
+                <h1 class="fs-4 ms-3">
+                    {{profil.name}} {{profil.surname}}
+                    <br>
+                    <small class="text-muted">@{{profil.user.username}} </small>
+                </h1>
+            </div>
+
+            {% if profil == request.user.profile %}
+                <div>
+                    <a href="{%url 'update' %}" class="btn btn-primary me-2">Profili Düzenle</a>
+                    <a href="{%url 'reset' %}" class="btn btn-primary me-2">Şifre Değiştir</a>
+                </div>
+                
+            {% else %}
+
+            {% endif %}
+
+        </div>
+       
+
+        <div class="profil-info d-flex justify-content-between">
+            <div>
+                <p>{{profil.bio}}</p>
+                <small class="text-muted"> Katılma Tarihi: {{profil.created_at|naturalday}} </small>
+            </div>
+
+            <div class="takipciler">
+                <small class="text-muted"> Takipciler: {{profil.followers.all.count}} </small>
+                <small class="text-muted"> Takip: {{profil.follow.all.count}} </small>
+                <br>
+                {% if profil == request.user.profile %}
+                
+                {% else %}
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {% if request.user.profile in profil.followers.all %}
+                        <input type="submit" class="btn btn-primary mt-2" name="takip" value="Takipten Çık">
+                    {% else %}
+                        <input type="submit" class="btn btn-primary mt-2" name="takip" value="Takip Et">
+
+                    {% endif %}
+                </form>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div> 
+
+    <div class="container">
+        <div class="tab">
+            <button class="tablinks active" onclick="openCity(event, 'paylasim')">Paylaşımlar</button>
+            <button class="tablinks" onclick="openCity(event, 'begen')">Beğeniler</button>
+          </div>
+
+          <div id="paylasim" class="tabcontent show">
+            {% for post in paylasim  %}
+            <div class="col-12 my-4">
+                        <div class="d-flex">
+                            <img src="{{post.owner.image.url}}" alt="" width="40" height="40" class="rounded-5 me-3" >
+                            <p> 
+                                <a href="{% url 'profile' post.owner.slug %}">{{post.owner.name}} {{post.owner.surname|slice:"1"}}.</a>
+                                <br>
+                                <small class="text-muted">@{{post.owner.user.username}} </small>
+                            </p>
+                        </div>
+                        <h4> {{post.title}} </h4>
+                        <p>
+                            <a href="{% url 'detail' post.id post.slug %}" class="text-decoration-none text-light">
+                            {{post.content}}</a>
+            
+                        </p>
+
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="postId" value="{{post.id}}">
+                            <input type="submit" name="like" value="Like ({{post.like.all.count}})" class="btn btn-primary">
+                            <input type="submit" name="dislike" value="Dislike ({{post.dislike.all.count}})" class="btn btn-primary">
+
+                        </form>
+                        <small class="text-muted"> {{post.created_at|naturaltime}} </small>
+                        <!-- <a href="">{{ post.id }}</a> -->
+                    </div>
+            
+            {% endfor %}
+          </div>
+          
+          <div id="begen" class="tabcontent">
+            {% for post in begen  %}
+            <div class="col-12 my-4">
+                        <div class="d-flex">
+                            <img src="{{post.owner.image.url}}" alt="" width="40" height="40" class="rounded-5 me-3" >
+                            <p> 
+                                <a href="{% url 'profile' post.owner.slug %}">{{post.owner.name}} {{post.owner.surname|slice:"1"}}.</a>
+                                <br>
+                                <small class="text-muted">@{{post.owner.user.username}} </small>
+                            </p>
+                        </div>
+                        <h4> {{post.title}} </h4>
+                        <p>
+                            <a href="{% url 'detail' post.id post.slug %}" class="text-decoration-none text-light">
+                            {{post.content}}</a>
+            
+                        </p>
+
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="postId" value="{{post.id}}">
+                            <input type="submit" name="like" value="Like ({{post.like.all.count}})" class="btn btn-primary">
+                            <input type="submit" name="dislike" value="Dislike ({{post.dislike.all.count}})" class="btn btn-primary">
+
+                        </form>
+                        <small class="text-muted"> {{post.created_at|naturaltime}} </small>
+                        <!-- <a href="">{{ post.id }}</a> -->
+                    </div>
+            
+            {% endfor %}
+          </div>
+    </div>
+
+    <script>
+        function openCity(evt, cityName) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(cityName).style.display = "block";
+          evt.currentTarget.className += " active";
+        }
+        </script>
+    
+    
+{% endblock content %}

@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Kayıt Ol</title>
+{% endblock title %}
+
+{% block content %}
+<form action="" method="POST" class="w-50 m-auto border p-4">
+    {% csrf_token %}
+    <label for="">Kullanıcı Adı</label>
+    <input type="text" name="username" id="" value="{{username}}" class="form-control">
+    <label for="">Email</label>
+    <input type="email" name="email" id="" value="{{email}}" class="form-control">
+    <label for="">İsim</label>
+    <input type="text" name="name" id="" value="{{name}}" class="form-control">
+    <label for="">Soyisim</label>
+    <input type="text" name="surname" id="" value="{{surname}}" class="form-control">
+    <label for="">Şifre</label>
+    <input type="password" name="password1" id="" class="form-control">
+    <label for="">Şifre Onay</label>
+    <input type="password" name="password2" id="" class="form-control">
+    <input type="submit" value="Kayıt Ol" class="btn btn-primary mt-2">
+
+
+</form>
+
+{% endblock content %}
