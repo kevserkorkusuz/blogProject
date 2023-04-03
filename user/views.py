@@ -111,6 +111,13 @@ def profile(request, slug):
                     hesabim.follow.add(profil)
                     messages.success(request, f'{profil.user.username} kullanıcısını takip etmeye başladınız')
                     return redirect('profile', slug=slug)
+            elif 'sil' in request.POST:
+                postId= request.POST['postId']
+                post = Post.objects.get(id = postId)
+                post.delete()
+                messages.success(request, 'Paylaşım Silindi')
+                return redirect('profile', slug=slug)
+            
             else:
                 like(request)
                 return redirect('profile', slug=slug)

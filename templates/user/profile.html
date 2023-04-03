@@ -95,7 +95,11 @@
 
           <div id="paylasim" class="tabcontent show">
             {% for post in paylasim  %}
-            <div class="col-12 my-4">
+            <div class="col-12 my-4 position-relative">
+                <button type="button" class="btn btn-close position-absolute end-0 top-0 me-2 mt-2" data-bs-toggle="modal" data-bs-target="#post-{{post.id}}">
+                </button>
+                {% include "partials/_modal.html" %}
+                
                         <div class="d-flex">
                             <img src="{{post.owner.image.url}}" alt="" width="40" height="40" class="rounded-5 me-3" >
                             <p> 
@@ -107,7 +111,7 @@
                         <h4> {{post.title}} </h4>
                         <p>
                             <a href="{% url 'detail' post.id post.slug %}" class="text-decoration-none text-light">
-                            {{post.content}}</a>
+                            {{post.content|safe}}</a>
             
                         </p>
 

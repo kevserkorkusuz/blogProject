@@ -9,6 +9,7 @@
     <form action="" method="POST" enctype="multipart/form-data" class="w-50 m-auto border p-4">
         {% csrf_token %}
         {{form}}
+        {{form.media}}
         <input type="submit" value="Oluştur" class="btn btn-outline-primary mt-2">
     </form>
 {% endblock content %}

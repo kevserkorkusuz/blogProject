@@ -45,7 +45,7 @@
                         <h4> {{post.title}} </h4>
                         <p>
                             <a href="{% url 'detail' post.id post.slug %}" class="text-decoration-none text-light">
-                            {{post.content}}</a>
+                            {{post.content|safe}}</a>
             
                         </p>
 
